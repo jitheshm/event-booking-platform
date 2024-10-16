@@ -20,7 +20,7 @@ export default class AuthenticationController implements IAuthenticationControll
             res.status(201).json({ success: true, data: response, message: "otp send successfully" })
 
         } catch (error) {
-            next(error)
+            next(error) 
         }
     }
 }

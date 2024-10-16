@@ -5,6 +5,7 @@ import { passwordHash } from "../utils/bycrypt";
 import IUserRepository from "../interfaces/IUserRepository";
 import { generateOtp, sendOtp } from "../utils/otp";
 import IOtpRepository from "../interfaces/IOtpRepository";
+import CustomError from "../errors/CustomError";
 
 
 @injectable()
@@ -23,9 +24,26 @@ export default class AuthenticationService implements IAuthenticationService {
 
     async signup(data: IUsers) {
         console.log(data)
+        const user = await this.userRepository.findByEmail(data.email)
+        console.log(user)
+        if (user) {
+            if (user.verified) {
+                throw new CustomError("user already exist", 409)
+            } else {
+                await this.newOtp({ email: user.email, context: "signup" })
+                return {
+                    _id: user._id,
+                    email: user.email,
+                    name: user.name,
+                    created_at: user.created_at,
+                    verified: user.verified,
+                    role: user.role
+                }
+            }
+        }
         data.password = await passwordHash(data.password)
         const result = await this.userRepository.create(data)
-        this.newOtp({ email: result.email, context: "signup" })
+        await this.newOtp({ email: result.email, context: "signup" })
         return result
     }
 

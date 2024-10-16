@@ -11,13 +11,23 @@ export default class UserRepository implements IUserRepository {
             await user.save()
 
             return {
-                id: user._id,
+                _id: user._id,
                 name: user.name,
                 email: user.email,
                 created_at: user.created_at,
                 role: user.role,
-                verified:user.verified
+                verified: user.verified
             };
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+    async findByEmail(email: string) {
+        try {
+            const user = await Users.findOne({ email: email })
+            return user as IUsers
         } catch (error) {
             console.log(error)
             throw error
