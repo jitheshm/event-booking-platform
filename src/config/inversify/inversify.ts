@@ -5,6 +5,8 @@ import IUserRepository from "../../interfaces/IUserRepository";
 import UserRepository from "../../repository/UserRepository";
 import IAuthenticationService from "../../interfaces/IAuthenticationService";
 import AuthenticationService from "../../services/AuthenticationService";
+import IOtpRepository from "../../interfaces/IOtpRepository";
+import OtpRepository from "../../repository/OtpRepository";
 
 
 const container = new Container();
@@ -13,6 +15,7 @@ const container = new Container();
 container.bind<IAuthenticationController>("IAuthenticationController").to(AuthenticationController);
 container.bind<IUserRepository>("IUserRepository").to(UserRepository);
 container.bind<IAuthenticationService>("IAuthenticationService").to(AuthenticationService);
+container.bind<IOtpRepository>("IOtpRepository").to(OtpRepository);
 
 
 export { container };

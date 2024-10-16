@@ -17,7 +17,7 @@ export default class AuthenticationController implements IAuthenticationControll
         try {
             const data = req.body
             const response = await this.authenticationService.signup(data)
-            res.status(201).json({ success: true, data: response })
+            res.status(201).json({ success: true, data: response, message: "otp send successfully" })
 
         } catch (error) {
             next(error)
