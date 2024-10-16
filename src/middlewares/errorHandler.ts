@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import CustomError from "../Errors/CustomError"
+import CustomError from "../errors/CustomError"
 
 
 export default (err: CustomError, req: Request, res: Response) => {

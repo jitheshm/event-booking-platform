@@ -11,7 +11,6 @@ const UsersSchema: Schema = new Schema({
     verified: { type: Boolean, require: true, default: false }
 });
 
-// Create the Mongoose model with the correct type
 const Users = mongoose.model<IUsers>('Users', UsersSchema);
 
 export default Users;
