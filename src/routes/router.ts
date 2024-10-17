@@ -1,8 +1,8 @@
 import express from 'express'
-import serviceProviderRouterv1 from './v1/serviceProviderRouter'
+import authenticationRouterV1 from './v1/authenticationRoutes'
 
 const router = express.Router()
 
-router.use('/v1/provider', serviceProviderRouterv1)
+router.use('/v1/auth', authenticationRouterV1)
 
 export default router

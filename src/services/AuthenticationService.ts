@@ -6,6 +6,7 @@ import IUserRepository from "../interfaces/IUserRepository";
 import { generateOtp, sendOtp } from "../utils/otp";
 import IOtpRepository from "../interfaces/IOtpRepository";
 import CustomError from "../errors/CustomError";
+import { IOtps } from "../interfaces/IOtps";
 
 
 @injectable()
@@ -56,5 +57,17 @@ export default class AuthenticationService implements IAuthenticationService {
         }
         const result = await this.otpRepository.create(otpObj)
         sendOtp(result.email, result.otp)
+    }
+
+    async verifyOtp(data: IOtps) {
+        const status = await this.otpRepository.verifyOtp(data.email, data.otp, data.context)
+        if (status) {
+            const result = await this.userRepository.updateByEmail(data.email, { verified: true })
+            if (!result) {
+                throw new CustomError("User not found", 404)
+            }
+        } else {
+            throw new CustomError("Unauthoroized", 401)
+        }
     }
 }

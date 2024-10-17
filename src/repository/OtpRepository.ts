@@ -19,4 +19,14 @@ export default class OtpRepository implements IOtpRepository {
             throw error
         }
     }
+
+    async verifyOtp(email: string, otp: string, context: string) {
+        try {
+            const existOtp = await Otps.findOne({ email: email, otp: otp, context: context })
+            return existOtp ? true : false
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
 }

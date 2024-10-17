@@ -33,4 +33,16 @@ export default class UserRepository implements IUserRepository {
             throw error
         }
     }
+
+    async updateByEmail(email: string, data: Partial<IUsers>) {
+        try {
+            return await Users.findOneAndUpdate({ email: email }, {
+                $set: data
+            }, { new: true }) as IUsers
+
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
 }
