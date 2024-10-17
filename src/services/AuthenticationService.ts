@@ -1,12 +1,13 @@
 import { inject, injectable } from "inversify";
 import IAuthenticationService from "../interfaces/IAuthenticationService";
 import { IUsers } from "../interfaces/IUsers";
-import { passwordHash } from "../utils/bycrypt";
+import { passwordHash, verifyPassword } from "../utils/bycrypt";
 import IUserRepository from "../interfaces/IUserRepository";
 import { generateOtp, sendOtp } from "../utils/otp";
 import IOtpRepository from "../interfaces/IOtpRepository";
 import CustomError from "../errors/CustomError";
 import { IOtps } from "../interfaces/IOtps";
+import { generateToken } from "../utils/token";
 
 
 @injectable()
@@ -68,6 +69,24 @@ export default class AuthenticationService implements IAuthenticationService {
             }
         } else {
             throw new CustomError("Unauthoroized", 401)
+        }
+    }
+
+    async login(data: Partial<IUsers>) {
+        const existUser = await this.userRepository.findByEmail(data.email!)
+        if (existUser) {
+            if(!existUser.verified){
+                throw new CustomError("email or password is incorrect", 404)
+            }
+            const result = await verifyPassword(data.password!, existUser.password)
+            if (result) {
+                const token = generateToken({ id: existUser._id!, email: existUser.email, name: existUser.name, role: existUser.role })
+                return { token, name: existUser.name, role: existUser.role }
+            } else {
+                throw new CustomError("email or password is incorrect", 404)
+            }
+        } else {
+            throw new CustomError("email or password is incorrect", 404)
         }
     }
 }

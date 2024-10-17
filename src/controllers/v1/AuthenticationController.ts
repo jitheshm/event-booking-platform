@@ -34,4 +34,23 @@ export default class AuthenticationController implements IAuthenticationControll
             next(error)
         }
     }
+
+    async login(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = req.body as { email: string, password: string, role: string }
+            const { token, ...result } = await this.authenticationService.login(data)
+            res.cookie('eventToken', token, {
+                httpOnly: true,
+                secure: true,
+                maxAge: 60 * 60 * 1000
+            });
+
+            res.status(200).json({ success: true, data: result, message: "user login successfully" })
+
+
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    }
 }
