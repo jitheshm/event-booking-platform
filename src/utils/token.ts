@@ -6,3 +6,6 @@ export const generateToken=(data:{id:Types.ObjectId,email:string,name:string,rol
     return jwt.sign(data,secret,{expiresIn:"1h"})
 }
 
+export const decryptToken=(token:string)=>{
+    return jwt.verify(token,secret) as jwt.JwtPayload
+}

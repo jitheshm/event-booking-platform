@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import express from 'express'
+import cookieParser from 'cookie-parser'
 
 import dotenv from 'dotenv'
 dotenv.config();
@@ -14,6 +15,7 @@ const app = express()
 
 const port = process.env.PORT || 3001
 app.use(express.json())
+app.use(cookieParser())
 dbConnect()
 
 app.use('/api', router)

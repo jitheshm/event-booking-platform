@@ -41,7 +41,7 @@ export default class AuthenticationController implements IAuthenticationControll
             const { token, ...result } = await this.authenticationService.login(data)
             res.cookie('eventToken', token, {
                 httpOnly: true,
-                secure: true,
+                // secure: true,
                 maxAge: 60 * 60 * 1000
             });
 
