@@ -27,4 +27,15 @@ export default class ServiceController implements IServiceController {
             next(error)
         }
     }
+
+    async getAllService(req: CustomRequest, res: Response, next: NextFunction) {
+        try {
+            const decodeData = req.decodeData as JwtPayload
+            const result = await this.servicePService.findService(decodeData)
+            res.status(200).json({ success: true, data: result, message: "Services fetched successfully" })
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    }
 }

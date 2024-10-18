@@ -1,7 +1,5 @@
 import z from 'zod';
 
-const isUniqueDigits = (value: string) => new Set(value).size > 1;
-
 const isValidDateString = (dateString: string): boolean => {
     const date = new Date(dateString);
     return !isNaN(date.getTime()); // Returns true if the date is valid
@@ -26,13 +24,6 @@ export const serviceSchema = z.object({
     availability_dates: z.array(z.string().refine(isValidDateString, {
         message: "Each date must be a valid date string."
     })),
-
-    contact_details: z.object({
-        mobile: z.string()
-            .length(10, { message: "Mobile number must be exactly 10 digits" })
-            .regex(/^\d{10}$/, { message: "Mobile number must only contain digits" })
-            .refine(isUniqueDigits, { message: "Mobile number cannot have all the same digits" }),
-    }),
 
     description: z.string()
         .trim()

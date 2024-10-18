@@ -10,6 +10,7 @@ const router = express.Router()
 const serviceController = container.get<IServiceController>("IServiceController")
 
 router.post('/service', validate(serviceSchema), (req: CustomRequest, res: Response, next: NextFunction) => serviceController.createService(req, res, next))
+router.get('/service', (req: CustomRequest, res: Response, next: NextFunction) => serviceController.getAllService(req, res, next))
 
 
 export default router

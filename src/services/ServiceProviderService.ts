@@ -18,4 +18,8 @@ export default class ServiceProviderService implements IServiceProviderService {
         data.availability_dates=data.availability_dates.map((ele)=>new Date(ele))
         return await this.serviceRepository.create({ ...data, service_provider_id: new Types.ObjectId(decodeData.id) })
     }
+
+    async findService(decodeData: JwtPayload){
+        return await this.serviceRepository.findService(new Types.ObjectId(decodeData.id))
+    }
 }
