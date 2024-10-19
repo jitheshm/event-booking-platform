@@ -21,7 +21,8 @@ export default class ServiceRepository implements IServiceRepository {
             return await Services.aggregate([
                 {
                     $match: {
-                        "service_provider_id": providerId
+                        "service_provider_id": providerId,
+                        "is_deleted":false
                     }
                 },
                 {
@@ -55,7 +56,7 @@ export default class ServiceRepository implements IServiceRepository {
 
     async updateService(providerId: Types.ObjectId, id: Types.ObjectId, data: Partial<ServiceInput>) {
         try {
-            const result = await Services.findOneAndUpdate({ _id: id, service_provider_id: providerId }, {
+            const result = await Services.findOneAndUpdate({ _id: id, service_provider_id: providerId,is_deleted:false }, {
                 $set: data
             }, {
                 new: true
