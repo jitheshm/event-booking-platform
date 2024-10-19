@@ -69,15 +69,15 @@ export default class ServiceController implements IServiceController {
     async getAllAvailableService(req: CustomRequest, res: Response, next: NextFunction) {
         try {
 
-            const { minPrice, maxPrice, category, location, availabilityDate } = req.query as {
-                minPrice?: string, maxPrice?: string, category?: string, location?: string, availabilityDate?: string
+            const { minPrice, maxPrice, category, location, availabilityDate,search } = req.query as {
+                minPrice?: string, maxPrice?: string, category?: string, location?: string, availabilityDate?: string,search?: string
             }
             const priceRange = {
                 min: Number(minPrice) as number,
                 max: Number(maxPrice) as number
             }
             const date = availabilityDate ? new Date(availabilityDate) : undefined
-            const result = await this.servicePService.findAllAvailable(priceRange, category, location, date)
+            const result = await this.servicePService.findAllAvailable(priceRange, category, location, date,search)
             res.status(200).json({ success: true, data: result, message: "data fetched successfully" })
         } catch (error) {
             console.log(error)

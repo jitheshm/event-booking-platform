@@ -44,8 +44,9 @@ export default class ServiceProviderService implements IServiceProviderService {
         priceRange?: { min: number; max: number },
         category?: string,
         location?: string,
-        availabilityDate?: Date
+        availabilityDate?: Date,
+        search?: string
     ) {
-        return await this.serviceRepository.findAllAvailableService(priceRange, category, location, availabilityDate)
+        return await this.serviceRepository.findAllAvailableService(priceRange, category, location, availabilityDate,search)
     }
 }

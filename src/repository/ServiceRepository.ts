@@ -72,7 +72,8 @@ export default class ServiceRepository implements IServiceRepository {
         priceRange?: { min: number; max: number },
         category?: string,
         location?: string,
-        availabilityDate?: Date
+        availabilityDate?: Date,
+        search?: string
     ): Promise<ServiceWithContact[]> {
         try {
             const matchCriteria: any = {
@@ -101,6 +102,13 @@ export default class ServiceRepository implements IServiceRepository {
                         status: 'open'
                     }
                 };
+            }
+
+            if (search) {
+                matchCriteria.$or = [
+                    { title: { $regex: search, $options: 'i' } },   // Case-insensitive search on title
+                    { description: { $regex: search, $options: 'i' } } // Case-insensitive search on description
+                ];
             }
 
             return await Services.aggregate<ServiceWithContact>([

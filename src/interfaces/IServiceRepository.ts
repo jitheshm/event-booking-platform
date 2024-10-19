@@ -8,5 +8,5 @@ export interface IServiceRepository {
     findAllAvailableService(priceRange?: {
         min: number;
         max: number;
-    }, category?: string, location?: string, availabilityDate?: Date): Promise<ServiceWithContact[]>
+    }, category?: string, location?: string, availabilityDate?: Date,search?: string): Promise<ServiceWithContact[]>
 }
