@@ -31,4 +31,12 @@ export default class ServiceProviderService implements IServiceProviderService {
         }
         return result
     }
+
+    async deleteService(decodeData: JwtPayload, id: string) {
+        const result = await this.serviceRepository.updateService(new Types.ObjectId(decodeData.id), new Types.ObjectId(id), {is_deleted:true})
+        if (!result) {
+            throw new CustomError("Service not found", 404)
+        }
+        return result
+    }
 }

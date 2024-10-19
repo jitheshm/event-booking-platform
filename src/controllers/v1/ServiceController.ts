@@ -52,4 +52,17 @@ export default class ServiceController implements IServiceController {
             next(error)
         }
     }
+
+    async deleteService(req: CustomRequest, res: Response, next: NextFunction) {
+        try {
+            const decodeData = req.decodeData as JwtPayload
+            const id = req.params.serviceId
+            const result = await this.servicePService.deleteService(decodeData, id)
+            res.status(200).json({ success: true, data: result, message: "service deleted successfully" })
+        }
+        catch (error) {
+            console.log(error)
+            next(error)
+        }
+    }
 }

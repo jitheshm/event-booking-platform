@@ -13,6 +13,8 @@ const serviceController = container.get<IServiceController>("IServiceController"
 router.post('/service', validate(serviceSchema), (req: CustomRequest, res: Response, next: NextFunction) => serviceController.createService(req, res, next))
 router.get('/service', (req: CustomRequest, res: Response, next: NextFunction) => serviceController.getAllService(req, res, next))
 router.patch('/service/:serviceId', validate(updateServiceSchema), (req: CustomRequest, res: Response, next: NextFunction) => serviceController.updateService(req, res, next))
+router.delete('/service/:serviceId', (req: CustomRequest, res: Response, next: NextFunction) => serviceController.deleteService(req, res, next))
+
 
 
 export default router
