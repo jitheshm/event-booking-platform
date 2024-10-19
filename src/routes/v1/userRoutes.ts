@@ -7,7 +7,7 @@ const router = express.Router()
 
 const serviceController = container.get<IServiceController>("IServiceController")
 
-router.get('/service', (req: CustomRequest, res: Response, next: NextFunction) => serviceController.getAllAvailableService(req, res, next))
+router.get('/services', (req: CustomRequest, res: Response, next: NextFunction) => serviceController.getAllAvailableService(req, res, next))
 
 
 
