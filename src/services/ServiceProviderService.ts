@@ -16,7 +16,7 @@ export default class ServiceProviderService implements IServiceProviderService {
     }
 
     async createService(data: ServiceInput, decodeData: JwtPayload) {
-        data.availability_dates = data.availability_dates.map((ele) => new Date(ele))
+        data.availability_dates = data.availability_dates.map((ele) => ({ date: new Date(ele.date), status: ele.status }))
         return await this.serviceRepository.create({ ...data, service_provider_id: new Types.ObjectId(decodeData.id) })
     }
 
@@ -33,7 +33,7 @@ export default class ServiceProviderService implements IServiceProviderService {
     }
 
     async deleteService(decodeData: JwtPayload, id: string) {
-        const result = await this.serviceRepository.updateService(new Types.ObjectId(decodeData.id), new Types.ObjectId(id), {is_deleted:true})
+        const result = await this.serviceRepository.updateService(new Types.ObjectId(decodeData.id), new Types.ObjectId(id), { is_deleted: true })
         if (!result) {
             throw new CustomError("Service not found", 404)
         }

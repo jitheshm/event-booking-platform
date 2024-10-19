@@ -2,8 +2,15 @@ import z from 'zod';
 
 const isValidDateString = (dateString: string): boolean => {
     const date = new Date(dateString);
-    return !isNaN(date.getTime()); // Returns true if the date is valid
+    return !isNaN(date.getTime());
 };
+
+const availabilityDateSchema = z.object({
+    date: z.string().refine(isValidDateString, {
+        message: "Date must be a valid date string.",
+    }),
+    status: z.string()
+});
 
 export const updateServiceSchema = z.object({
     title: z.string()
@@ -25,10 +32,7 @@ export const updateServiceSchema = z.object({
         .regex(/^[A-Za-z\s]+$/, { message: "Category must only contain letters" })
         .optional(),
 
-    availability_dates: z.array(z.string().refine(isValidDateString, {
-        message: "Each date must be a valid date string."
-    }))
-    .optional(),
+    availability_dates: z.array(availabilityDateSchema).optional(),
 
     description: z.string()
         .trim()

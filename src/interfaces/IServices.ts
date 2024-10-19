@@ -5,10 +5,10 @@ export interface IServices {
     title: string;
     price_per_day: number;
     category: string;
-    availability_dates: Date[];
+    availability_dates: { date: Date, status: string }[];
     description: string
     service_provider_id: Types.ObjectId;
-    is_deleted:boolean
+    is_deleted: boolean
 }
 
 export type ServiceInput = Omit<IServices, "_id" | "service_provider_id">
