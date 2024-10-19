@@ -33,6 +33,10 @@ export const serviceSchema = z.object({
         message: "At least one availability date is required.",
     }),
 
+    location: z.string()
+        .trim()
+        .min(3, { message: "locatin must have at least 3 characters" }),
+
     description: z.string()
         .trim()
         .min(10, { message: "Description must have at least 10 characters" }),

@@ -39,4 +39,13 @@ export default class ServiceProviderService implements IServiceProviderService {
         }
         return result
     }
+
+    async findAllAvailable(
+        priceRange?: { min: number; max: number },
+        category?: string,
+        location?: string,
+        availabilityDate?: Date
+    ) {
+        return await this.serviceRepository.findAllAvailableService(priceRange, category, location, availabilityDate)
+    }
 }

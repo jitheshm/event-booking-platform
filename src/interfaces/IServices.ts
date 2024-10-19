@@ -5,6 +5,7 @@ export interface IServices {
     title: string;
     price_per_day: number;
     category: string;
+    location:string
     availability_dates: { date: Date, status: string }[];
     description: string
     service_provider_id: Types.ObjectId;
@@ -12,3 +13,11 @@ export interface IServices {
 }
 
 export type ServiceInput = Omit<IServices, "_id" | "service_provider_id">
+
+export type ServiceWithContact= IServices & {
+    contact_details:{
+        name:string,
+        email:string,
+        mobile:string
+    }
+}

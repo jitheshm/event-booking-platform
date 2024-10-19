@@ -6,4 +6,5 @@ export interface IServiceController {
     getAllService(req: CustomRequest, res: Response, next: NextFunction): Promise<void>
     updateService(req: CustomRequest, res: Response, next: NextFunction): Promise<void>
     deleteService(req: CustomRequest, res: Response, next: NextFunction): Promise<void>
+    getAllAvailableService(req: CustomRequest, res: Response, next: NextFunction): Promise<void>
 }

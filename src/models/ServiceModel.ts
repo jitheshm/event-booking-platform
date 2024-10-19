@@ -7,6 +7,7 @@ const ServicesSchema: Schema = new Schema({
     title: { type: String, required: true },
     price_per_day: { type: Number, required: true },
     category: { type: String, required: true },
+    location: { type: String, required: true },
     availability_dates: [{ date: { type: Date, required: true }, status: { type: String, required: true, enum: ['open', 'booked'] } }],
     description: { type: String, required: true },
     service_provider_id: { type: Types.ObjectId, required: true },

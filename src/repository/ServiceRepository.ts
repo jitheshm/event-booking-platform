@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IServiceRepository } from "../interfaces/IServiceRepository";
-import { IServices, ServiceInput } from "../interfaces/IServices";
+import { IServices, ServiceInput, ServiceWithContact } from "../interfaces/IServices";
 import Services from "../models/ServiceModel";
 import { Types } from "mongoose";
 
@@ -16,7 +16,7 @@ export default class ServiceRepository implements IServiceRepository {
             throw error
         }
     }
-    async findService(providerId: Types.ObjectId) {
+    async findService(providerId: Types.ObjectId): Promise<ServiceWithContact[]> {
         try {
             return await Services.aggregate([
                 {
@@ -65,6 +65,73 @@ export default class ServiceRepository implements IServiceRepository {
         } catch (error) {
             console.log(error)
             throw error
+        }
+    }
+
+    async findAllAvailableService(
+        priceRange?: { min: number; max: number },
+        category?: string,
+        location?: string,
+        availabilityDate?: Date
+    ): Promise<ServiceWithContact[]> {
+        try {
+            const matchCriteria: any = {
+                "is_deleted": false
+            };
+
+            if (priceRange) {
+                matchCriteria.price_per_day = {
+                    $gte: priceRange.min,
+                    $lte: priceRange.max
+                };
+            }
+
+            if (category) {
+                matchCriteria.category = category;
+            }
+
+            if (location) {
+                matchCriteria.location = location;
+            }
+
+            if (availabilityDate) {
+                matchCriteria.availability_dates = {
+                    $elemMatch: {
+                        date: { $gte: availabilityDate },
+                        status: 'open'
+                    }
+                };
+            }
+
+            return await Services.aggregate<ServiceWithContact>([
+                {
+                    $match: matchCriteria
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "service_provider_id",
+                        foreignField: "_id",
+                        pipeline: [
+                            {
+                                $project: {
+                                    "name": 1,
+                                    "email": 1,
+                                    "mobile": 1,
+                                    "_id": 0
+                                }
+                            }
+                        ],
+                        as: "contact_details"
+                    }
+                },
+                {
+                    $unwind: "$contact_details"
+                }
+            ]);
+        } catch (error) {
+            console.log(error);
+            throw error;
         }
     }
 }
