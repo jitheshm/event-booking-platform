@@ -142,4 +142,63 @@ export default class ServiceRepository implements IServiceRepository {
             throw error;
         }
     }
+
+    async findServiceById(serviceId: Types.ObjectId): Promise<ServiceWithContact[]> {
+        try {
+            return await Services.aggregate([
+                {
+                    $match: {
+                        "_id": serviceId,
+                        "is_deleted": false
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "service_provider_id",
+                        foreignField: "_id",
+                        pipeline: [
+                            {
+                                $project: {
+                                    "name": 1,
+                                    "email": 1,
+                                    "mobile": 1,
+                                    "_id": 0
+                                }
+                            }
+                        ],
+                        as: "contact_details"
+                    }
+                },
+                {
+                    $unwind: "$contact_details"
+                }
+
+            ])
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+    async availableStatusUpdate(serviceId: Types.ObjectId, bookingDates: Date[], status: string) {
+        try {
+
+            await Services.updateOne(
+                { _id: serviceId },
+                {
+                    $set: {
+                        "availability_dates.$[elem].status": status
+                    }
+                },
+                {
+                    arrayFilters: [{ "elem.date": { $in: bookingDates } }]
+                }
+            );
+
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
 }

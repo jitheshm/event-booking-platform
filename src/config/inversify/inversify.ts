@@ -13,6 +13,12 @@ import ServiceController from "../../controllers/v1/ServiceController";
 import ServiceProviderService from "../../services/ServiceProviderService";
 import { IServiceRepository } from "../../interfaces/IServiceRepository";
 import ServiceRepository from "../../repository/ServiceRepository";
+import { IBookingRepository } from "../../interfaces/IBookingRepository";
+import BookingRepository from "../../repository/BookingRepository";
+import { IBookingService } from "../../interfaces/IBookingService";
+import { BookingService } from "../../services/BookingService";
+import { IBookingController } from "../../interfaces/IBookingController";
+import { BookingController } from "../../controllers/v1/BookingController";
 
 
 const container = new Container();
@@ -25,6 +31,10 @@ container.bind<IOtpRepository>("IOtpRepository").to(OtpRepository);
 container.bind<IServiceRepository>("IServiceRepository").to(ServiceRepository);
 container.bind<IServiceProviderService>("IServiceProviderService").to(ServiceProviderService);
 container.bind<IServiceController>("IServiceController").to(ServiceController);
+container.bind<IBookingRepository>("IBookingRepository").to(BookingRepository);
+container.bind<IBookingService>("IBookingService").to(BookingService);
+container.bind<IBookingController>("IBookingController").to(BookingController);
+
 
 
 
