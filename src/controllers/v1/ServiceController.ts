@@ -38,4 +38,18 @@ export default class ServiceController implements IServiceController {
             next(error)
         }
     }
+
+    async updateService(req: CustomRequest, res: Response, next: NextFunction) {
+        try {
+            const decodeData = req.decodeData as JwtPayload
+            const data = req.body as Partial<ServiceInput>
+            const id = req.params.serviceId
+            const result = await this.servicePService.updateService(decodeData, id, data)
+            res.status(200).json({ success: true, data: result, message: "service updated successfully" })
+        }
+        catch (error) {
+            console.log(error)
+            next(error)
+        }
+    }
 }

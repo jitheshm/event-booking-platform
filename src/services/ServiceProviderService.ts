@@ -4,6 +4,7 @@ import { IServiceRepository } from "../interfaces/IServiceRepository";
 import { inject, injectable } from "inversify";
 import { Types } from "mongoose";
 import { IServiceProviderService } from "../interfaces/IServiceProviderService";
+import CustomError from "../errors/CustomError";
 
 @injectable()
 export default class ServiceProviderService implements IServiceProviderService {
@@ -15,11 +16,19 @@ export default class ServiceProviderService implements IServiceProviderService {
     }
 
     async createService(data: ServiceInput, decodeData: JwtPayload) {
-        data.availability_dates=data.availability_dates.map((ele)=>new Date(ele))
+        data.availability_dates = data.availability_dates.map((ele) => new Date(ele))
         return await this.serviceRepository.create({ ...data, service_provider_id: new Types.ObjectId(decodeData.id) })
     }
 
-    async findService(decodeData: JwtPayload){
+    async findService(decodeData: JwtPayload) {
         return await this.serviceRepository.findService(new Types.ObjectId(decodeData.id))
+    }
+
+    async updateService(decodeData: JwtPayload, id: string, data: Partial<ServiceInput>) {
+        const result = await this.serviceRepository.updateService(new Types.ObjectId(decodeData.id), new Types.ObjectId(id), data)
+        if (!result) {
+            throw new CustomError("Service not found", 404)
+        }
+        return result
     }
 }
