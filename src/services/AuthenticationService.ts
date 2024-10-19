@@ -39,6 +39,7 @@ export default class AuthenticationService implements IAuthenticationService {
                     name: user.name,
                     created_at: user.created_at,
                     verified: user.verified,
+                    mobile:user.mobile,
                     role: user.role
                 }
             }

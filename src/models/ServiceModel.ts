@@ -10,6 +10,7 @@ const ServicesSchema: Schema = new Schema({
     availability_dates: [{ type: Date, required: true }],
     description: { type: String, required: true },
     service_provider_id: { type: Types.ObjectId, required: true },
+    is_deleted:{type:Boolean,require:true,default:false}
 });
 
 const Services = mongoose.model<IServices>('Services', ServicesSchema);

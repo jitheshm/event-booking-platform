@@ -7,5 +7,6 @@ export interface IUsers {
     created_at: Date;
     password: string;
     role: string;
+    mobile:string
     verified?:boolean
 }

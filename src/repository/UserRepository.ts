@@ -16,6 +16,7 @@ export default class UserRepository implements IUserRepository {
                 email: user.email,
                 created_at: user.created_at,
                 role: user.role,
+                mobile:user.mobile,
                 verified: user.verified
             };
         } catch (error) {
