@@ -68,4 +68,9 @@ export class BookingService implements IBookingService {
         }
         return result
     }
+
+    async serviceBookingList(serviceId: string) {
+        const currentDate = new Date()
+        return await this.bookingRepository.serviceBookingList(new Types.ObjectId(serviceId), currentDate)
+    }
 }

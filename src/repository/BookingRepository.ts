@@ -108,4 +108,49 @@ export default class BookingRepository {
             throw error
         }
     }
+
+    async serviceBookingList(serviceId: Types.ObjectId, currentDate: Date) {
+        try {
+            const bookings = await Booking.aggregate([
+                {
+                    $match: {
+                        "service_id": serviceId
+                    }
+
+                }, {
+                    $unwind: "$booking_dates",
+
+                },
+                {
+                    $facet: {
+                        past_booking: [
+
+                            {
+                                $match: {
+                                    "booking_dates": {
+                                        $lt: currentDate
+                                    }
+                                }
+                            }
+                        ],
+                        upcomming_booking: [
+
+                            {
+                                $match: {
+                                    "booking_dates": {
+                                        $gte: currentDate
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ])
+            // console.log(bookings)
+            return bookings
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }
