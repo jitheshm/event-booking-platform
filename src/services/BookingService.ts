@@ -4,18 +4,23 @@ import { Types } from "mongoose";
 import CustomError from "../errors/CustomError";
 import { IBookingRepository } from "../interfaces/IBookingRepository";
 import { IBookingService } from "../interfaces/IBookingService";
+import IUserRepository from "../interfaces/IUserRepository";
+import { sendConfirmEmail } from "../utils/email";
 
 @injectable()
 
 export class BookingService implements IBookingService {
     private serviceRepository: IServiceRepository
     private bookingRepository: IBookingRepository
+    private userRepository: IUserRepository
     constructor(
         @inject("IServiceRepository") serviceRepository: IServiceRepository,
-        @inject("IBookingRepository") bookingRepository: IBookingRepository
+        @inject("IBookingRepository") bookingRepository: IBookingRepository,
+        @inject("IUserRepository") userRepository: IUserRepository
     ) {
         this.serviceRepository = serviceRepository
         this.bookingRepository = bookingRepository
+        this.userRepository = userRepository
     }
 
     async ServiceBook(userId: string, serviceId: string, dates: string[]) {
@@ -47,7 +52,10 @@ export class BookingService implements IBookingService {
         await this.serviceRepository.availableStatusUpdate(data.service_id, data.booking_dates, "booked")
         try {
             data.total_price = service[0].price_per_day * dates.length
-            return await this.bookingRepository.confirm(data)
+            const bookedResult = await this.bookingRepository.confirm(data)
+            const user = await this.userRepository.findById(data.user_id)
+            sendConfirmEmail(user, service[0], data.booking_dates)
+            return bookedResult
         } catch (error) {
             await this.serviceRepository.availableStatusUpdate(data.service_id, data.booking_dates, "open")
             throw error

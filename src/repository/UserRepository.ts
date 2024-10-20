@@ -2,6 +2,7 @@ import { injectable } from "inversify";
 import IUserRepository from "../interfaces/IUserRepository";
 import { IUsers } from "../interfaces/IUsers";
 import Users from "../models/UserModel";
+import { Types } from "mongoose";
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -16,7 +17,7 @@ export default class UserRepository implements IUserRepository {
                 email: user.email,
                 created_at: user.created_at,
                 role: user.role,
-                mobile:user.mobile,
+                mobile: user.mobile,
                 verified: user.verified
             };
         } catch (error) {
@@ -41,6 +42,16 @@ export default class UserRepository implements IUserRepository {
                 $set: data
             }, { new: true }) as IUsers
 
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+    async findById(id: Types.ObjectId) {
+        try {
+            const user = await Users.findOne({ _id: id }, { password: 0 })
+            return user as Omit<IUsers,"password">
         } catch (error) {
             console.log(error)
             throw error
