@@ -60,4 +60,12 @@ export class BookingService implements IBookingService {
         const currentDate = new Date()
         return await this.bookingRepository.userBookingList(new Types.ObjectId(userId), currentDate)
     }
+
+    async bookingDetails(bookingId: string) {
+        const result = await this.bookingRepository.fetchBookingDetailsById(new Types.ObjectId(bookingId))
+        if (result.length < 1) {
+            throw new CustomError("booking not found", 404)
+        }
+        return result
+    }
 }

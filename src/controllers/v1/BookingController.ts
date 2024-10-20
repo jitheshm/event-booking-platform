@@ -38,4 +38,16 @@ export class BookingController {
             next(error)
         }
     }
+
+    async bookingDetails(req: CustomRequest, res: Response, next: NextFunction) {
+        try {
+            const bookingId=req.params.bookingId
+            const result=await this.bookingService.bookingDetails(bookingId)
+            res.status(200).json({success:true,data:result,message:"booking details fetched successfully"})
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    }
+
 }
