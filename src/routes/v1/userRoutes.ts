@@ -12,7 +12,8 @@ const serviceController = container.get<IServiceController>("IServiceController"
 const bookingController = container.get<IBookingController>("IBookingController")
 
 router.get('/services', (req: CustomRequest, res: Response, next: NextFunction) => serviceController.getAllAvailableService(req, res, next))
-router.post('/services/:serviceId/book',validate(bookingSchema), (req: CustomRequest, res: Response, next: NextFunction) => bookingController.bookService(req, res, next))
+router.post('/services/:serviceId/book', validate(bookingSchema), (req: CustomRequest, res: Response, next: NextFunction) => bookingController.bookService(req, res, next))
+router.get('/bookings', (req: CustomRequest, res: Response, next: NextFunction) => bookingController.userBookingList(req, res, next))
 
 
 

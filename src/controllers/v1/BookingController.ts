@@ -27,4 +27,15 @@ export class BookingController {
             next(error)
         }
     }
+
+    async userBookingList(req: CustomRequest, res: Response, next: NextFunction) {
+        try {
+            const decodeData = req.decodeData as JwtPayload
+            const result = await this.bookingService.userBookingList(decodeData.id)
+            res.status(200).json({ success: true, data: result, message: "booking list fetched successfully" })
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+    }
 }
